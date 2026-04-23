@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Quicksand';
+  background:linear-gradient(#eef2ee,#f7f4ef);
+  overflow-x:hidden;
+}
+
+/* layout */
+.container{
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:20px;
+  padding:20px;
+}
+
+.panel{
+  background:rgba(255,255,255,0.75);
+  border-radius:25px;
+  padding:20px;
+  backdrop-filter:blur(10px);
+}
+
+/* tabs */
+.tabs{
+  text-align:center;
+  padding:10px;
+}
+.tab{
+  display:inline-block;
+  margin:5px;
+  padding:6px 12px;
+  border-radius:12px;
+  cursor:pointer;
+}
+.tab.active{
+  background:#7aa87a;
+  color:white;
+}
+
+/* calendar */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:10px;
+}
+
+.day{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:2px solid #7aa87a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.day.checked{
+  background:#7aa87a;
+  color:white;
+  box-shadow:0 0 10px #7aa87a;
+}
+
+/* vinyls */
+.vinyl{
+  width:70px;
+  height:70px;
+  background:black;
+  border-radius:50%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin:6px;
+  position:relative;
+}
+.vinyl:hover{
+  animation:spin 2s linear infinite;
+}
+@keyframes spin{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+.vinyl::after{
+  content:"";
+  width:22px;
+  height:22px;
+  background:#e6c79c;
+  border-radius:50%;
+}
+.vinyl input{
+  position:absolute;
+  width:60px;
+  text-align:center;
+  font-size:10px;
+  border:none;
+  background:transparent;
+  color:white;
+}
+
+/* bookshelf */
+.book{
+  display:inline-block;
+  margin:2px;
+  background:#d8c3a5;
+  writing-mode:vertical-rl;
+  font-size:9px;
+  padding:2px;
+}
+.book:nth-child(odd){ height:70px; width:18px; }
+.book:nth-child(even){ height:85px; width:22px; }
+
+/* mood heatmap */
+.mood-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+  margin-top:10px;
+}
+
+.mood-day{
+  width:20px;
+  height:20px;
+  border-radius:4px;
+  background:#eee;
+  cursor:pointer;
+}
+
+.mood1 { background:#d6e4ff; }
+.mood2 { background:#cfe8d5; }
+.mood3 { background:#f3f0e6; }
+.mood4 { background:#ffe5b4; }
+.mood5 { background:#ffd6a5; }
+
+/* insight */
+#insight{
+  margin-top:15px;
+  font-style:italic;
+  opacity:0.7;
+}
+
+/* rain */
+.rain{
+  position:fixed;
+  width:2px;
+  height:12px;
+  background:#9dbbd6;
+  top:-20px;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{ transform:translateY(110vh); }
+}
+
+/* leaves */
+.leaf{
+  position:fixed;
+  width:8px;
+  height:8px;
+  border-radius:2px;
+  top:-20px;
+  animation:leafFall linear infinite;
+}
+@keyframes leafFall{
+  to{ transform:translateY(110vh) translateX(40px); }
+}
+
+h3{
+  font-family:'Playfair Display';
+}
+</style>
+</head>
+
+<body>
+
+<div id="effects"></div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="container">
+
+<div class="panel">
+<h3>Listening To:</h3>
+<div id="vinyls"></div>
+
+<h3>Bookshelf</h3>
+<div id="books"></div>
+
+<h3>Energy</h3>
+<div class="mood-grid" id="moods"></div>
+</div>
+
+<div class="panel">
+<h2 id="monthTitle"></h2>
+<div class="grid" id="grid"></div>
+<p id="insight"></p>
+</div>
+
+</div>
+
+<script>
+const months=["April","May","June","July","August","September","October","November","December"];
+let currentMonth=0;
+
+/* tabs */
+const tabs=document.getElementById("tabs");
+months.forEach((m,i)=>{
+  let t=document.createElement("span");
+  t.className="tab";
+  t.innerText=m;
+  t.onclick=()=>{currentMonth=i;render();};
+  tabs.appendChild(t);
+});
+
+/* seasonal effects */
+function setEffects(month){
+  const e=document.getElementById("effects");
+  e.innerHTML="";
+
+  if(month==="April"){
+    for(let i=0;i<40;i++){
+      let r=document.createElement("div");
+      r.className="rain";
+      r.style.left=Math.random()*100+"vw";
+      r.style.animationDuration=(0.8+Math.random())+"s";
+      e.appendChild(r);
+    }
+  }
+
+  if(month==="November"){
+    const colors=["#d27d2d","#c94c4c","#e0ac69"];
+    for(let i=0;i<25;i++){
+      let l=document.createElement("div");
+      l.className="leaf";
+      l.style.background=colors[Math.floor(Math.random()*3)];
+      l.style.left=Math.random()*100+"vw";
+      l.style.animationDuration=(4+Math.random()*3)+"s";
+      e.appendChild(l);
+    }
+  }
+}
+
+/* render */
+function render(){
+
+document.querySelectorAll(".tab").forEach((t,i)=>{
+  t.classList.toggle("active",i===currentMonth);
+});
+
+document.getElementById("monthTitle").innerText=months[currentMonth];
+
+/* calendar */
+const grid=document.getElementById("grid");
+grid.innerHTML="";
+
+let outsideDays=0;
+
+for(let i=1;i<=30;i++){
+  let d=document.createElement("div");
+  d.className="day";
+  d.innerText=i;
+
+  let key=currentMonth+"-"+i;
+
+  if(localStorage.getItem(key)==="true"){
+    d.classList.add("checked");
+    outsideDays++;
+  }
+
+  d.onclick=()=>{
+    d.classList.toggle("checked");
+    localStorage.setItem(key,d.classList.contains("checked"));
+    render();
+  };
+
+  grid.appendChild(d);
+}
+
+/* vinyls */
+const vinyls=document.getElementById("vinyls");
+vinyls.innerHTML="";
+for(let i=0;i<5;i++){
+  let v=document.createElement("div");
+  v.className="vinyl";
+
+  let input=document.createElement("input");
+  input.value=localStorage.getItem("song-"+i)||"";
+  input.oninput=()=>localStorage.setItem("song-"+i,input.value);
+
+  v.appendChild(input);
+  vinyls.appendChild(v);
+}
+
+/* books */
+const books=document.getElementById("books");
+books.innerHTML="";
+for(let i=0;i<10;i++){
+  let b=document.createElement("div");
+  b.className="book";
+  b.contentEditable=true;
+  b.innerText=localStorage.getItem("book-"+i)||"";
+  b.oninput=()=>localStorage.setItem("book-"+i,b.innerText);
+  books.appendChild(b);
+}
+
+/* mood */
+const moods=document.getElementById("moods");
+moods.innerHTML="";
+
+let moodSum=0, moodCount=0, outsideMoodSum=0, outsideMoodCount=0;
+
+for(let i=0;i<30;i++){
+  let m=document.createElement("div");
+  m.className="mood-day";
+
+  let val=parseInt(localStorage.getItem("mood-"+currentMonth+"-"+i))||0;
+
+  if(val){
+    m.classList.add("mood"+val);
+    moodSum+=val;
+    moodCount++;
+  }
+
+  let outside=localStorage.getItem(currentMonth+"-"+(i+1))==="true";
+  if(val && outside){
+    outsideMoodSum+=val;
+    outsideMoodCount++;
+  }
+
+  m.onclick=()=>{
+    val=(val+1)%6;
+    localStorage.setItem("mood-"+currentMonth+"-"+i,val);
+    render();
+  };
+
+  moods.appendChild(m);
+}
+
+/* insights */
+const insight=document.getElementById("insight");
+
+if(moodCount<5){
+  insight.innerText="just gently noticing patterns 🌿";
+}
+else{
+  let avg=moodSum/moodCount;
+  let outsideAvg=outsideMoodCount?outsideMoodSum/outsideMoodCount:0;
+
+  if(outsideAvg>avg+0.5){
+    insight.innerText="you tend to feel a little lighter on days you go outside 🌿";
+  }
+  else if(outsideDays<5){
+    insight.innerText="even a few minutes outside can gently shift your day ☀️";
+  }
+  else if(avg<3){
+    insight.innerText="your body might be asking for extra rest lately 💛";
+  }
+  else{
+    insight.innerText="your energy has been feeling fairly steady ✨";
+  }
+}
+
+setEffects(months[currentMonth]);
+}
+
+render();
+</script>
+
+</body>
+</html>
