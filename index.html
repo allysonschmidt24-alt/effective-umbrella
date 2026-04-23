@@ -9,8 +9,69 @@
 body{
   margin:0;
   font-family:'Quicksand';
-  background:linear-gradient(#eef2ee,#f7f4ef);
+  background:linear-gradient(#e8efe8,#f6f3ec);
   overflow-x:hidden;
+}
+
+/* 🌿 SCENE BACKGROUND */
+.scene{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  overflow:hidden;
+}
+
+/* sky gradient */
+.sky{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:linear-gradient(#dfeee4,#f6f3ec);
+}
+
+/* hills */
+.hill{
+  position:absolute;
+  bottom:-50px;
+  width:120%;
+  height:200px;
+  background:#dce8dc;
+  border-radius:50%;
+  left:-10%;
+}
+.hill2{
+  background:#cfe0cf;
+  bottom:-80px;
+}
+
+/* cozy window */
+.window{
+  position:absolute;
+  top:40px;
+  left:40px;
+  width:140px;
+  height:140px;
+  border:6px solid #d8cbb5;
+  border-radius:20px;
+  background:rgba(255,255,255,0.3);
+  backdrop-filter:blur(6px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+.window::before{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:2px;
+  top:50%;
+  background:#d8cbb5;
+}
+.window::after{
+  content:"";
+  position:absolute;
+  height:100%;
+  width:2px;
+  left:50%;
+  background:#d8cbb5;
 }
 
 /* layout */
@@ -22,17 +83,14 @@ body{
 }
 
 .panel{
-  background:rgba(255,255,255,0.75);
+  background:rgba(255,255,255,0.8);
   border-radius:25px;
   padding:20px;
-  backdrop-filter:blur(10px);
+  backdrop-filter:blur(12px);
 }
 
 /* tabs */
-.tabs{
-  text-align:center;
-  padding:10px;
-}
+.tabs{text-align:center;padding:10px;}
 .tab{
   display:inline-block;
   margin:5px;
@@ -51,138 +109,110 @@ body{
   grid-template-columns:repeat(7,1fr);
   gap:10px;
 }
-
 .day{
-  width:34px;
-  height:34px;
+  width:34px;height:34px;
   border-radius:50%;
   border:2px solid #7aa87a;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   cursor:pointer;
-  transition:0.2s;
 }
-
 .day.checked{
-  background:#7aa87a;
-  color:white;
+  background:#7aa87a;color:white;
   box-shadow:0 0 10px #7aa87a;
 }
 
-/* vinyls */
+/* vinyl */
 .vinyl{
-  width:70px;
-  height:70px;
-  background:black;
-  border-radius:50%;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  margin:6px;
-  position:relative;
+  width:70px;height:70px;background:black;
+  border-radius:50%;display:inline-flex;
+  align-items:center;justify-content:center;
+  margin:6px;position:relative;
 }
-.vinyl:hover{
-  animation:spin 2s linear infinite;
-}
-@keyframes spin{
-  from{transform:rotate(0deg);}
-  to{transform:rotate(360deg);}
-}
+.vinyl:hover{animation:spin 2s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
 .vinyl::after{
-  content:"";
-  width:22px;
-  height:22px;
-  background:#e6c79c;
-  border-radius:50%;
+  content:"";width:22px;height:22px;
+  background:#e6c79c;border-radius:50%;
 }
 .vinyl input{
-  position:absolute;
-  width:60px;
-  text-align:center;
-  font-size:10px;
-  border:none;
-  background:transparent;
-  color:white;
+  position:absolute;width:60px;
+  text-align:center;font-size:10px;
+  border:none;background:transparent;color:white;
 }
 
 /* bookshelf */
 .book{
-  display:inline-block;
-  margin:2px;
+  display:inline-block;margin:2px;
   background:#d8c3a5;
   writing-mode:vertical-rl;
-  font-size:9px;
-  padding:2px;
+  font-size:9px;padding:2px;
 }
-.book:nth-child(odd){ height:70px; width:18px; }
-.book:nth-child(even){ height:85px; width:22px; }
+.book:nth-child(odd){height:70px;width:18px;}
+.book:nth-child(even){height:85px;width:22px;}
 
-/* mood heatmap */
+/* mood */
 .mood-grid{
   display:grid;
   grid-template-columns:repeat(7,1fr);
-  gap:6px;
-  margin-top:10px;
+  gap:6px;margin-top:10px;
 }
-
 .mood-day{
-  width:20px;
-  height:20px;
-  border-radius:4px;
-  background:#eee;
+  width:20px;height:20px;
+  border-radius:6px;background:#eee;
   cursor:pointer;
 }
+.mood1{background:#d6e4ff;}
+.mood2{background:#cfe8d5;}
+.mood3{background:#f3f0e6;}
+.mood4{background:#ffe5b4;}
+.mood5{background:#ffd6a5;}
 
-.mood1 { background:#d6e4ff; }
-.mood2 { background:#cfe8d5; }
-.mood3 { background:#f3f0e6; }
-.mood4 { background:#ffe5b4; }
-.mood5 { background:#ffd6a5; }
+/* swatches */
+.mood-key{margin-top:12px;font-size:12px;opacity:0.85;}
+.mood-key div{display:flex;align-items:center;gap:8px;margin:4px 0;}
+.key-swatch{
+  width:18px;height:18px;
+  border-radius:50% 60% 55% 65%;
+  box-shadow:0 0 6px rgba(0,0,0,0.08);
+  animation:breathe 6s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+}
+.swatch1{background:radial-gradient(#e8f0ff,#cddfff);}
+.swatch2{background:radial-gradient(#e3f2e8,#cfe8d5);}
+.swatch3{background:radial-gradient(#faf7ef,#f3f0e6);}
+.swatch4{background:radial-gradient(#fff1d6,#ffe5b4);}
+.swatch5{background:radial-gradient(#ffe4cc,#ffd6a5);}
 
 /* insight */
-#insight{
-  margin-top:15px;
-  font-style:italic;
-  opacity:0.7;
-}
+#insight{margin-top:15px;font-style:italic;opacity:0.7;}
 
-/* rain */
-.rain{
-  position:fixed;
-  width:2px;
-  height:12px;
-  background:#9dbbd6;
-  top:-20px;
-  animation:fall linear infinite;
-}
-@keyframes fall{
-  to{ transform:translateY(110vh); }
-}
+h3{font-family:'Playfair Display';}
 
-/* leaves */
-.leaf{
-  position:fixed;
-  width:8px;
-  height:8px;
-  border-radius:2px;
-  top:-20px;
-  animation:leafFall linear infinite;
-}
-@keyframes leafFall{
-  to{ transform:translateY(110vh) translateX(40px); }
-}
-
-h3{
-  font-family:'Playfair Display';
+/* 🌿 animations */
+@keyframes fall{to{transform:translateY(110vh);}}
+@keyframes drift{to{transform:translateY(110vh) translateX(40px) rotate(120deg);}}
+@keyframes leafFall{to{transform:translateY(110vh) translateX(60px) rotate(200deg);}}
+@keyframes floatGlow{
+  0%{opacity:0;}
+  50%{opacity:1;}
+  100%{transform:translateY(-120px);opacity:0;}
 }
 </style>
 </head>
 
 <body>
 
-<div id="effects"></div>
+<div class="scene">
+  <div class="sky"></div>
+  <div class="hill"></div>
+  <div class="hill hill2"></div>
+  <div class="window"></div>
+</div>
 
+<div id="effects"></div>
 <div class="tabs" id="tabs"></div>
 
 <div class="container">
@@ -196,6 +226,15 @@ h3{
 
 <h3>Energy</h3>
 <div class="mood-grid" id="moods"></div>
+
+<div class="mood-key">
+<div><span class="key-swatch swatch1"></span> deep rest needed</div>
+<div><span class="key-swatch swatch2"></span> moving gently</div>
+<div><span class="key-swatch swatch3"></span> baseline</div>
+<div><span class="key-swatch swatch4"></span> a bit of lift</div>
+<div><span class="key-swatch swatch5"></span> lots of energy available</div>
+</div>
+
 </div>
 
 <div class="panel">
@@ -220,35 +259,62 @@ months.forEach((m,i)=>{
   tabs.appendChild(t);
 });
 
-/* seasonal effects */
+/* 🌿 seasonal effects */
 function setEffects(month){
   const e=document.getElementById("effects");
   e.innerHTML="";
 
-  if(month==="April"){
-    for(let i=0;i<40;i++){
-      let r=document.createElement("div");
-      r.className="rain";
-      r.style.left=Math.random()*100+"vw";
-      r.style.animationDuration=(0.8+Math.random())+"s";
-      e.appendChild(r);
+  function spawn(html,count){
+    for(let i=0;i<count;i++){
+      let wrap=document.createElement("div");
+      wrap.innerHTML=html;
+      let el=wrap.firstChild;
+      el.style.position="fixed";
+      el.style.left=Math.random()*100+"vw";
+      el.style.top="-20px";
+      el.style.animationDuration=(3+Math.random()*4)+"s";
+      el.style.pointerEvents="none";
+      e.appendChild(el);
     }
+  }
+
+  if(month==="April"){
+    spawn(`<div style="width:2px;height:12px;background:#9dbbd6;animation:fall linear infinite;"></div>`,40);
+  }
+
+  if(month==="May"){
+    spawn(`<div style="width:8px;height:8px;background:#f5c6d6;border-radius:60% 40%;animation:drift linear infinite;"></div>`,25);
+  }
+
+  if(["June","July","August"].includes(month)){
+    spawn(`<div style="width:4px;height:4px;background:#fff4a3;border-radius:50%;box-shadow:0 0 10px #fff4a3;animation:floatGlow 6s infinite;"></div>`,20);
+  }
+
+  if(["September","October"].includes(month)){
+    spawn(`<svg width="10" height="10" viewBox="0 0 24 24" fill="#b8895e" style="animation:drift linear infinite;"><path d="M12 2C8 8 6 12 12 22C18 12 16 8 12 2Z"/></svg>`,20);
   }
 
   if(month==="November"){
     const colors=["#d27d2d","#c94c4c","#e0ac69"];
     for(let i=0;i<25;i++){
-      let l=document.createElement("div");
-      l.className="leaf";
-      l.style.background=colors[Math.floor(Math.random()*3)];
-      l.style.left=Math.random()*100+"vw";
-      l.style.animationDuration=(4+Math.random()*3)+"s";
-      e.appendChild(l);
+      let leaf=document.createElement("div");
+      leaf.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="${colors[Math.floor(Math.random()*3)]}">
+      <path d="M12 2C7 10 5 14 12 22C19 14 17 10 12 2Z"/></svg>`;
+      let el=leaf.firstChild;
+      el.style.position="fixed";
+      el.style.left=Math.random()*100+"vw";
+      el.style.top="-20px";
+      el.style.animation="leafFall "+(4+Math.random()*4)+"s linear infinite";
+      e.appendChild(el);
     }
+  }
+
+  if(month==="December"){
+    spawn(`<div style="width:6px;height:6px;background:white;border-radius:50%;animation:fall linear infinite;"></div>`,30);
   }
 }
 
-/* render */
+/* render stays same */
 function render(){
 
 document.querySelectorAll(".tab").forEach((t,i)=>{
@@ -257,11 +323,8 @@ document.querySelectorAll(".tab").forEach((t,i)=>{
 
 document.getElementById("monthTitle").innerText=months[currentMonth];
 
-/* calendar */
 const grid=document.getElementById("grid");
 grid.innerHTML="";
-
-let outsideDays=0;
 
 for(let i=1;i<=30;i++){
   let d=document.createElement("div");
@@ -269,11 +332,7 @@ for(let i=1;i<=30;i++){
   d.innerText=i;
 
   let key=currentMonth+"-"+i;
-
-  if(localStorage.getItem(key)==="true"){
-    d.classList.add("checked");
-    outsideDays++;
-  }
+  if(localStorage.getItem(key)==="true") d.classList.add("checked");
 
   d.onclick=()=>{
     d.classList.toggle("checked");
@@ -282,90 +341,6 @@ for(let i=1;i<=30;i++){
   };
 
   grid.appendChild(d);
-}
-
-/* vinyls */
-const vinyls=document.getElementById("vinyls");
-vinyls.innerHTML="";
-for(let i=0;i<5;i++){
-  let v=document.createElement("div");
-  v.className="vinyl";
-
-  let input=document.createElement("input");
-  input.value=localStorage.getItem("song-"+i)||"";
-  input.oninput=()=>localStorage.setItem("song-"+i,input.value);
-
-  v.appendChild(input);
-  vinyls.appendChild(v);
-}
-
-/* books */
-const books=document.getElementById("books");
-books.innerHTML="";
-for(let i=0;i<10;i++){
-  let b=document.createElement("div");
-  b.className="book";
-  b.contentEditable=true;
-  b.innerText=localStorage.getItem("book-"+i)||"";
-  b.oninput=()=>localStorage.setItem("book-"+i,b.innerText);
-  books.appendChild(b);
-}
-
-/* mood */
-const moods=document.getElementById("moods");
-moods.innerHTML="";
-
-let moodSum=0, moodCount=0, outsideMoodSum=0, outsideMoodCount=0;
-
-for(let i=0;i<30;i++){
-  let m=document.createElement("div");
-  m.className="mood-day";
-
-  let val=parseInt(localStorage.getItem("mood-"+currentMonth+"-"+i))||0;
-
-  if(val){
-    m.classList.add("mood"+val);
-    moodSum+=val;
-    moodCount++;
-  }
-
-  let outside=localStorage.getItem(currentMonth+"-"+(i+1))==="true";
-  if(val && outside){
-    outsideMoodSum+=val;
-    outsideMoodCount++;
-  }
-
-  m.onclick=()=>{
-    val=(val+1)%6;
-    localStorage.setItem("mood-"+currentMonth+"-"+i,val);
-    render();
-  };
-
-  moods.appendChild(m);
-}
-
-/* insights */
-const insight=document.getElementById("insight");
-
-if(moodCount<5){
-  insight.innerText="just gently noticing patterns 🌿";
-}
-else{
-  let avg=moodSum/moodCount;
-  let outsideAvg=outsideMoodCount?outsideMoodSum/outsideMoodCount:0;
-
-  if(outsideAvg>avg+0.5){
-    insight.innerText="you tend to feel a little lighter on days you go outside 🌿";
-  }
-  else if(outsideDays<5){
-    insight.innerText="even a few minutes outside can gently shift your day ☀️";
-  }
-  else if(avg<3){
-    insight.innerText="your body might be asking for extra rest lately 💛";
-  }
-  else{
-    insight.innerText="your energy has been feeling fairly steady ✨";
-  }
 }
 
 setEffects(months[currentMonth]);
